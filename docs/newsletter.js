@@ -31,7 +31,7 @@ function submitHandler(event) {
 
   loadingButton.style.display = "flex";
 
-  var formBody = "userGroup=PreObliquulLaunch&email=" + encodeURIComponent(formInput.value);
+  var formBody = "userGroup=Obliquul-Pre-Launch&email=" + encodeURIComponent(formInput.value);
   fetch(event.target.action, {
     method: "POST",
     body: formBody,
