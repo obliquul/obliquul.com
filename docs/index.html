@@ -1,151 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>//obliquus</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <meta charset="UTF-8">
+    <title>obliquul</title>
+    <link href="main.css" rel="stylesheet">
   </head>
   <body>
-    <header>
-      <a href="index.html">
-        <h1><span>//</span></h1>
-      </a>
-    </header>
-    <main>
-      <h2>Coming Soon</h2>
-      <p class="subtext">In the meantime, why don't you sign up for our<br>newsletter to stay up to date.</p>
-<style>@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');</style><div class="newsletter-form-container"><form class="newsletter-form" action="https://app.loops.so/api/newsletter-form/cliagdnu400e8me0gyxm3prey" method="POST" style="display: flex; flex-direction: row; align-items: center; justify-content: center; width: 100%;"><input class="newsletter-form-input" name="newsletter-form-input" type="email" placeholder="email" required="" style="font-family: Inter, sans-serif; color: rgb(0, 0, 0); font-size: 14px; margin: 0px 10px 0px 0px; width: 100%; max-width: 300px; min-width: 100px; background: rgb(255, 255, 255); border: 1px solid rgb(209, 213, 219); box-sizing: border-box; box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px; border-radius: 6px; padding: 8px 12px;"><button type="submit" class="newsletter-form-button" style="background: rgb(0, 0, 0); font-size: 14px; color: rgb(255, 255, 255); font-family: Inter, sans-serif; display: flex; width: min-content; max-width: 300px; white-space: nowrap; height: 38px; align-items: center; justify-content: center; flex-direction: row; padding: 9px 17px; box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px; border-radius: 6px; text-align: center; font-style: normal; font-weight: 500; line-height: 20px; border: none; cursor: pointer;">Join Waitlist</button><button type="button" class="newsletter-loading-button" style="background: rgb(0, 0, 0); font-size: 14px; color: rgb(255, 255, 255); font-family: Inter, sans-serif; display: none; width: min-content; max-width: 300px; white-space: nowrap; height: 38px; align-items: center; justify-content: center; flex-direction: row; padding: 9px 17px; box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px; border-radius: 6px; text-align: center; font-style: normal; font-weight: 500; line-height: 20px; border: none; cursor: pointer;">Please wait...</button></form><div class="newsletter-success" style="display: none; align-items: center; justify-content: center; width: 100%;"><p class="newsletter-success-message" style="font-family: Inter, sans-serif; color: rgb(0, 0, 0); font-size: 14px;">Thanks! We'll be in touch!</p></div><div class="newsletter-error" style="display: none; align-items: center; justify-content: center; width: 100%;"><p class="newsletter-error-message" style="font-family: Inter, sans-serif; color: rgb(185, 28, 28); font-size: 14px;">Oops! Something went wrong, please try again</p></div>
-<button 
-class='newsletter-back-button'
-type='button' 
-style='color:#6b7280;font: 14px, Inter, sans-serif;margin:10px auto;text-align:center;display:none;background:transparent;border:none;cursor:pointer'
-onmouseout='this.style.textDecoration="none"' 
-onmouseover='this.style.textDecoration="underline"'>
-&larr; Back
-</button>
-</div><script>
-function submitHandler(event) {
-  event.preventDefault();
-  var container = event.target.parentNode;
-  var form = container.querySelector(".newsletter-form");
-  var formInput = container.querySelector(".newsletter-form-input");
-  var success = container.querySelector(".newsletter-success");
-  var errorContainer = container.querySelector(".newsletter-error");
-  var errorMessage = container.querySelector(".newsletter-error-message");
-  var backButton = container.querySelector(".newsletter-back-button");
-  var submitButton = container.querySelector(".newsletter-form-button");
-  var loadingButton = container.querySelector(".newsletter-loading-button");
-
-  const rateLimit = () => {
-    errorContainer.style.display = "flex";
-    errorMessage.innerText = "Too many signups, please try again in a little while";
-    submitButton.style.display = "none";
-    formInput.style.display = "none";
-    backButton.style.display = "block";
-  }
-
-  // Compare current time with time of previous sign up
-  var time = new Date();
-  var timestamp = time.valueOf();
-  var previousTimestamp = localStorage.getItem("loops-form-timestamp");
-
-  // If last sign up was less than a minute ago
-  // display error
-  if (previousTimestamp && Number(previousTimestamp) + 60000 > timestamp) {
-    rateLimit();
-    return;
-  }
-  localStorage.setItem("loops-form-timestamp", timestamp);
-
-  submitButton.style.display = "none";
-  loadingButton.style.display = "flex";
-
-  var formBody = "userGroup=&email=" + encodeURIComponent(formInput.value);
-  fetch(event.target.action, {
-    method: "POST",
-    body: formBody,
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-  })
-    .then((res) => [res.ok, res.json(), res])
-    .then(([ok, dataPromise, res]) => {
-      if (ok) {
-        // If response successful
-        // display success
-        success.style.display = "flex";
-        form.reset();
-      } else {
-        // If response unsuccessful
-        // display error message or response status
-        dataPromise.then(data => {
-          errorContainer.style.display = "flex";
-          errorMessage.innerText = data.message
-            ? data.message
-            : res.statusText;
-        });
-      }
-    })
-    .catch(error => {
-      // check for cloudflare error
-      if (error.message === "Failed to fetch") {
-        rateLimit();
-        return;
-      }
-      // If error caught
-      // display error message if available
-      errorContainer.style.display = "flex";
-      if (error.message) errorMessage.innerText = error.message;
-      localStorage.setItem("loops-form-timestamp", '');
-    })
-    .finally(() => {
-      formInput.style.display = "none";
-      loadingButton.style.display = "none";
-      backButton.style.display = "block";
-    });
-}
-function resetFormHandler(event) {
-  var container = event.target.parentNode;
-  var formInput = container.querySelector(".newsletter-form-input");
-  var success = container.querySelector(".newsletter-success");
-  var errorContainer = container.querySelector(".newsletter-error");
-  var errorMessage = container.querySelector(".newsletter-error-message");
-  var backButton = container.querySelector(".newsletter-back-button");
-  var submitButton = container.querySelector(".newsletter-form-button");
-
-  success.style.display = "none";
-  errorContainer.style.display = "none";
-  errorMessage.innerText = "Oops! Something went wrong, please try again";
-  backButton.style.display = "none";
-  formInput.style.display = "flex";
-  submitButton.style.display = "flex";
-}
-
-var formContainers = document.getElementsByClassName(
-  "newsletter-form-container"
-);
-
-for (var i = 0; i < formContainers.length; i++) {
-  var formContainer = formContainers[i]
-  var handlersAdded = formContainer.classList.contains('newsletter-handlers-added')
-  if (handlersAdded) continue;
-  formContainer
-    .querySelector(".newsletter-form")
-    .addEventListener("submit", submitHandler);
-  formContainer
-    .querySelector(".newsletter-back-button")
-    .addEventListener("click", resetFormHandler);
-  formContainer.classList.add("newsletter-handlers-added");
-}
-</script>
-    </main>
-    <footer>
-      <div class="footer-left">
-        <p>&copy; 2023 Obliquus. All rights reserved.</p>
+    <div class="hero min-h-screen bg-base-200">
+      <div class="hero-content text-center">
+        <div class="max-w-md">
+          <h1 class="text-5xl font-bold">Oh, Hello 👋🏻</h1>
+          <p class="py-6">You're like, <b>SUPER</b> early.. <sup><i>(love that for you)</i></sup><br><br> ..but, we're not <i>quite</i> ready for you. You can sign up for our newsletter and when we are ready for you (or have something special to share), <b>YOU</b> will be among the first to know..</p>
+          <div class="newsletter-form-container relative w-80 mx-auto">
+            <form class="newsletter-form" action="https://app.loops.so/api/newsletter-form/cliagdnu400e8me0gyxm3prey" method="POST">
+              <input class="newsletter-form-input input w-full pr-16 bg-neutral type="email" placeholder="email@example.com">
+              <button type="submit" class="newsletter-form-button btn btn-primary absolute right-0 rounded-l-none">Subscribe <span class="newsletter-loading-button loading loading-spinner" style="display: none;"></span></button>
+            </form>
+            <div class="newsletter-success" style="display: none;">
+              <p class="newsletter-success-message py-6">We can't wait to share what we have cooking..</p>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="footer-right">
-        <p><a href="terms.html">Terms & Conditions</a></p>
-      </div>
-    </footer>
+    </div>
+    <div class="toast toast-top toast-center">
+      <div class="newsletter-toast-success" style="display: none;">
+        <p class="newsletter-toast-success-message">Success!</p>
+    </div>
+      <div class="newsletter-toast-error" style="display: none;">
+        <p class="newsletter-toast-error-message">Something went wrong!</p>
+    </div>
+  </div>
   </body>
+  <footer class="footer p-10 bg-base-100 text-base-content">
+    <div>
+      <span class="footer-title">Services</span> 
+      <a class="link link-hover"><s>Develop</s> <sup>(coming soon)</sup></a> 
+      <a class="link link-hover"><s>Design</s> <sup>(coming soon)</sup></a> 
+    </div>
+    <div>
+      <span class="footer-title">Company</span>
+      <a class="link link-hover"><s>Products</s> <sup>(coming soon)</sup></a>
+      <a class="link link-hover"><s>Contact</s> <sup>(coming soon)</sup></a> 
+    </div>
+    <div>
+      <span class="footer-title">Legal</span> 
+      <a class="link link-hover"><s>Terms of use</s> <sup>(coming soon)</sup></a> 
+      <a class="link link-hover"><s>Privacy policy</s> <sup>(coming soon)</sup></a> 
+    </div>
+    <div>
+      <span class="footer-title">Newsletter</span> 
+      <div class="newsletter-form-container relative w-80 mx-auto">
+        <form class="newsletter-form" action="https://app.loops.so/api/newsletter-form/cliagdnu400e8me0gyxm3prey" method="POST">
+          <input class="newsletter-form-input input w-full pr-16 bg-neutral type="email" placeholder="email@example.com">
+          <button type="submit" class="newsletter-form-button btn btn-primary absolute right-0 rounded-l-none">Subscribe <span class="newsletter-loading-button loading loading-spinner" style="display: none;"></span></button>
+        </form>
+        <div class="newsletter-success" style="display: none;">
+          <p class="newsletter-success-message py-6">We can't wait to share what we have cooking..</p>
+        </div>
+      </div>
+  </footer>
+  <footer class="footer px-10 py-4 border-t bg-base-100 text-base-content border-base-300">
+    <div class="items-center grid-flow-col">
+      <p>© Obliquul Limited</p>
+    </div>
+    <div class="md:place-self-center md:justify-self-end">
+      <div class="grid grid-flow-col gap-4">
+        <a href="https://twitter.com/obliquul">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
+            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+  <script src="newsletter.js"></script>
 </html>
